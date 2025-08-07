@@ -360,37 +360,36 @@
         <field name="name">x.project.task.form2.checkpoint.extension</field>
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="priority">99</field>
         <field name="arch" type="xml">
-                        <xpath expr="//notebook" position="inside">
-                <page string="x_Required Documents">
-                    <field name="x_required_document_ids">
-                        <list editable="bottom">
-                            <field name="name"/>
-                            <field name="x_document_type_id"/>
-                            <field name="x_is_required"/>
-                            <field name="x_is_verify"/>
-                            <field name="x_is_expired"/>
-                            <field name="attachment_id"/>
-                        </list>
-                    </field>
-                </page>
-                <page string="x_Deliverable Documents">
-                    <field name="x_deliverable_document_ids">
-                        <list editable="bottom">
-                            <field name="name"/>
-                            <field name="x_document_type_id"/>
-                            <field name="x_is_required"/>
-                            <field name="x_is_verify"/>
-                            <field name="x_is_expired"/>
-                            <field name="attachment_id"/>
-                        </list>
-                    </field>
-                </page>
-                
-                <!-- Add Extra Info tab with checkpoint table -->
-                <page name="extra_info_custom" string="Extra Info">
-                    <!-- Combined Documents Workflow Section -->
-                    <group string="Documents Workflow">
+            <!-- Replace the core Extra Info tab content -->
+            <xpath expr="//page[@name='extra_info']" position="replace">
+                <page name="extra_info" string="Extra Info">
+                    <!-- 📋 Standard Extra Info Fields -->
+                    <group string="📋 Standard Information" groups="base.group_no_one">
+                        <group>
+                            <field name="parent_id" groups="base.group_no_one" context="{'search_view_ref' : 'project.view_task_search_form','search_default_project_id': project_id, 'search_default_open_tasks': 1}"/>
+                            <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            <field name="sequence" groups="base.group_no_one"/>
+                            <field name="email_cc" groups="base.group_no_one"/>
+                            <field name="displayed_image_id" groups="base.group_no_one" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="date_assign" groups="base.group_no_one"/>
+                            <field name="date_last_stage_update" groups="base.group_no_one"/>
+                        </group>
+                        <group string="Working Time to Assign" invisible="working_hours_open == 0.0">
+                            <field name="working_hours_open" widget="float_time" string="Hours"/>
+                            <field name="working_days_open" string="Days"/>
+                        </group>
+                        <group string="Working Time to Close" invisible="working_hours_close == 0.0">
+                            <field name="working_hours_close" widget="float_time" string="Hours"/>
+                            <field name="working_days_close" string="Days"/>
+                        </group>
+                    </group>
+                    
+                    <!-- 📋 Documents Workflow Section -->
+                    <group string="📋 Documents Workflow">
                         <div class="o_row" style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
                             <!-- Required Documents Section -->
                             <div style="display: flex; align-items: center; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
@@ -438,8 +437,8 @@
                         </div>
                     </group>
                     
-                    <!-- Checkpoint Configuration Rules Section -->
-                    <group string="Checkpoint Configuration Rules">
+                    <!-- 🎯 Checkpoint Configuration Rules Section -->
+                    <group string="🎯 Checkpoint Configuration Rules">
                         <div class="oe_button_box">
                             <button name="action_copy_checkpoints_from_template" 
                                     type="object" 
@@ -472,14 +471,6 @@
                             <button name="action_complete_checkpoint_with_milestone_simple" type="object" string="✅ Complete Checkpoint with Milestone" class="btn-success"/>
                         </div>
                         <field name="milestone_id"/>
-                        <field name="milestone_ids" readonly="1">
-                            <list>
-                                <field name="name"/>
-                                <field name="deadline"/>
-                                <field name="is_reached"/>
-                                <field name="milestone_message"/>
-                            </list>
-                        </field>
                     </group>
                 </page>
             </xpath>

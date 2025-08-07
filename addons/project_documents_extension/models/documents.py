@@ -99,6 +99,28 @@ class ProjectRequiredDocument(models.Model):
         default=fields.datetime.now(),
     )
     attachment_id = fields.Many2one('ir.attachment', related='document_id.attachment_id', string='Attachment', store=False, readonly=False)
+    
+    # Computed field for dynamic name generation
+    x_computed_name = fields.Char(
+        string='x_Computed Name',
+        compute='_compute_x_name',
+        store=True,
+        help='Dynamically generated name based on document type and template'
+    )
+
+    @api.depends('x_document_type_id', 'x_product_tmpl_id')
+    def _compute_x_name(self):
+        """Compute dynamic name based on document type and template ID"""
+        for record in self:
+            if record.x_document_type_id and record.x_product_tmpl_id:
+                doc_type_name = record.x_document_type_id.name or ''
+                template_name = record.x_product_tmpl_id.name or ''
+                template_id = record.x_product_tmpl_id.id
+                record.x_computed_name = f"{doc_type_name} - {template_name} (ID: {template_id})"
+            elif record.x_document_type_id:
+                record.x_computed_name = f"{record.x_document_type_id.name} - Document"
+            else:
+                record.x_computed_name = "Document"
 
     @api.depends('x_expiry_date')
     def x_compute_expired(self):
@@ -127,6 +149,11 @@ class ProjectRequiredDocument(models.Model):
         for vals in vals_list:
             if 'x_number' not in vals:
                 vals['x_number'] = self.env['ir.sequence'].next_by_code(self._name) or _(u"New")
+            # Set product_tmpl_id from context if available
+            if 'product_tmpl_id' not in vals and self.env.context.get('default_product_tmpl_id'):
+                vals['product_tmpl_id'] = self.env.context['default_product_tmpl_id']
+            if 'x_product_tmpl_id' not in vals and self.env.context.get('default_product_tmpl_id'):
+                vals['x_product_tmpl_id'] = self.env.context['default_product_tmpl_id']
         records = super(type(self), self).create(vals_list)
         for record in records:
             record.x_check_duplicate_after_create()
@@ -275,6 +302,28 @@ class ProjectDeliverableDocument(models.Model):
         default=fields.datetime.now(),
     )
     attachment_id = fields.Many2one('ir.attachment', related='document_id.attachment_id', string='Attachment', store=False, readonly=False) 
+    
+    # Computed field for dynamic name generation
+    x_computed_name = fields.Char(
+        string='x_Computed Name',
+        compute='_compute_x_name',
+        store=True,
+        help='Dynamically generated name based on document type and template'
+    )
+
+    @api.depends('x_document_type_id', 'x_product_tmpl_id')
+    def _compute_x_name(self):
+        """Compute dynamic name based on document type and template ID"""
+        for record in self:
+            if record.x_document_type_id and record.x_product_tmpl_id:
+                doc_type_name = record.x_document_type_id.name or ''
+                template_name = record.x_product_tmpl_id.name or ''
+                template_id = record.x_product_tmpl_id.id
+                record.x_computed_name = f"{doc_type_name} - {template_name} (ID: {template_id})"
+            elif record.x_document_type_id:
+                record.x_computed_name = f"{record.x_document_type_id.name} - Document"
+            else:
+                record.x_computed_name = "Document"
 
     @api.depends('x_expiry_date')
     def x_compute_expired(self):
@@ -303,6 +352,11 @@ class ProjectDeliverableDocument(models.Model):
         for vals in vals_list:
             if 'x_number' not in vals:
                 vals['x_number'] = self.env['ir.sequence'].next_by_code(self._name) or _(u"New")
+            # Set product_tmpl_id from context if available
+            if 'product_tmpl_id' not in vals and self.env.context.get('default_product_tmpl_id'):
+                vals['product_tmpl_id'] = self.env.context['default_product_tmpl_id']
+            if 'x_product_tmpl_id' not in vals and self.env.context.get('default_product_tmpl_id'):
+                vals['x_product_tmpl_id'] = self.env.context['default_product_tmpl_id']
         records = super(type(self), self).create(vals_list)
         for record in records:
             record.x_check_duplicate_after_create()

@@ -304,7 +304,8 @@ class TaskCheckpoint(models.Model):
     _description = 'Task Checkpoint'
     _order = 'sequence, id'
 
-    task_id = fields.Many2one('project.task', string='Task', required=True, ondelete='cascade')
+    task_id = fields.Many2one('project.task', string='Task', ondelete='cascade')
+    project_id = fields.Many2one('project.project', string='Project', ondelete='cascade')
     checkpoint_ids = fields.Many2many('reached.checkpoint', string='Reached Checkpoints')
     stage_id = fields.Many2one('project.task.type', string='Stage')
     milestone_id = fields.Many2one('project.milestone', string='Milestone')

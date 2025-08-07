@@ -10,21 +10,21 @@
                 <page name="x_required_documents" string="x_Required Documents">
                     <field name="x_required_document_ids">
                         <list editable="bottom">
-                            <field name="name"/>
                             <field name="x_document_type_id"/>
+                            <field name="x_computed_name"/>
                             <field name="x_is_required"/>
                             <field name="x_expiry_date"/>
                             <field name="x_is_expired"/>
                             <field name="x_is_verify"/>
-                            <field name="attachment_id"/>
+                            <!-- <field name="attachment_id"/> -->
                         </list>
                         <form>
                             <group>
-                                <field name="name"/>
                                 <field name="x_document_type_id"/>
+                                <field name="x_computed_name" readonly="1"/>
                                 <field name="x_is_required"/>
                                 <field name="x_expiry_date"/>
-                                <field name="attachment_id"/>
+                                <!-- <field name="attachment_id"/> -->
                             </group>
                         </form>
                     </field>
@@ -32,21 +32,21 @@
                 <page name="x_deliverable_documents" string="x_Deliverable Documents">
                     <field name="x_deliverable_document_ids">
                         <list editable="bottom">
-                            <field name="name"/>
                             <field name="x_document_type_id"/>
+                            <field name="x_computed_name"/>
                             <field name="x_is_required"/>
                             <field name="x_expiry_date"/>
                             <field name="x_is_expired"/>
                             <field name="x_is_verify"/>
-                            <field name="attachment_id"/>
+                            <!-- <field name="attachment_id"/> -->
                         </list>
                         <form>
                             <group>
-                                <field name="name"/>
                                 <field name="x_document_type_id"/>
+                                <field name="x_computed_name" readonly="1"/>
                                 <field name="x_is_required"/>
                                 <field name="x_expiry_date"/>
-                                <field name="attachment_id"/>
+                                <!-- <field name="attachment_id"/> -->
                             </group>
                         </form>
                     </field>
@@ -303,6 +303,9 @@
         <field name="res_model">product.task.template</field>
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="x_product_task_template_list"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('x_product_task_template_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('x_product_task_template_form_enhanced')})]"/>
         <field name="search_view_id" ref="x_product_task_template_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">

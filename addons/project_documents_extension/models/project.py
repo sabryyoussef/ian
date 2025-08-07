@@ -1077,6 +1077,9 @@ class ProjectProject(models.Model):
         help='Track checkpoints that have been reached in this project'
     )
 
+    # --- Project Checkpoints ---
+    task_checkpoint_ids = fields.One2many('task.checkpoint', 'project_id', string='Project Checkpoints')
+
     # --- Computed Summary Fields ---
     checkpoint_summary = fields.Text(
         string="Checkpoint Summary", 
