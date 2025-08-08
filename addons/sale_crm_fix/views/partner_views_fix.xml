@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Fix for sale_crm compatibility issue -->
+    <record id="res_partner_address_type_fix" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.base.fix</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="sale_crm.res_partner_address_type" />
+        <field name="arch" type="xml">
+            <!-- Remove the problematic xpath expressions that reference non-existent fields -->
+            <xpath expr="//field[@name='child_ids']//field[@name='type']" position="replace">
+                <!-- This field doesn't exist in Odoo 18, so we remove it -->
+            </xpath>
+            <xpath expr="//field[@name='child_ids']//field[@name='type']" position="replace">
+                <!-- This field doesn't exist in Odoo 18, so we remove it -->
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -283,7 +283,7 @@ class ProjectRequiredDocument(models.Model):
                         'attachment_id': attachment.id,
                         'res_model': project._name,
                         'res_id': project.id,
-                        'type': 'file',
+                        'type': 'binary',
                         'folder_id': project.documents_folder_id.id,
                     })
                     _logger.info(f"[x_doc] Created documents.document {doc.id} in folder {project.documents_folder_id.name}")
@@ -368,7 +368,7 @@ class ProjectRequiredDocument(models.Model):
                         'attachment_id': attachment.id,
                         'res_model': project._name,
                         'res_id': project.id,
-                        'type': 'file',
+                        'type': 'binary',
                         'folder_id': project.documents_folder_id.id,
                     })
 
@@ -592,7 +592,7 @@ class ProjectDeliverableDocument(models.Model):
                         'attachment_id': attachment.id,
                         'res_model': project._name,
                         'res_id': project.id,
-                        'type': 'file',
+                        'type': 'binary',
                         'folder_id': project.documents_folder_id.id,
                     })
                     _logger.info(f"[x_doc] Created documents.document {doc.id} in folder {project.documents_folder_id.name}")
@@ -616,6 +616,7 @@ class ProjectDeliverableDocument(models.Model):
     def create(self, vals_list):
         records = super().create(vals_list)
         records._auto_convert_x_attachments()
+        records._auto_assign_project_folder()
         return records
 
     def write(self, vals):
@@ -646,6 +647,19 @@ class ProjectDeliverableDocument(models.Model):
             }
         }
 
+    def action_copy_attachments_to_project_folder(self):
+        """Manual action to copy attachments to project folder"""
+        self._copy_attachments_to_project_folder()
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Success',
+                'message': f'Attachments copied to project folder for {len(self)} document(s).',
+                'type': 'success',
+            }
+        }
+
     def _auto_convert_x_attachments(self):
         for record in self:
             project = record.x_project_id or (record.x_task_id and record.x_task_id.project_id)
@@ -663,7 +677,7 @@ class ProjectDeliverableDocument(models.Model):
                         'attachment_id': attachment.id,
                         'res_model': project._name,
                         'res_id': project.id,
-                        'type': 'file',
+                        'type': 'binary',
                         'folder_id': project.documents_folder_id.id,
                     })
 
@@ -789,6 +803,33 @@ class ProjectProject(models.Model):
             'context': {
                 'default_project_id': self.id,
                 'default_available_folders': [(6, 0, folders.ids)]
+            }
+        }
+
+    def action_test_copy_attachments(self):
+        """Test method to copy attachments from all documents in this project"""
+        required_docs = self.env['project.required.document'].search([('x_project_id', '=', self.id)])
+        deliverable_docs = self.env['project.deliverable.document'].search([('x_project_id', '=', self.id)])
+        
+        total_copied = 0
+        
+        # Copy attachments from required documents
+        for doc in required_docs:
+            doc._copy_attachments_to_project_folder()
+            total_copied += len(doc.x_attachment_ids) if doc.x_attachment_ids else 0
+        
+        # Copy attachments from deliverable documents
+        for doc in deliverable_docs:
+            doc._copy_attachments_to_project_folder()
+            total_copied += len(doc.x_attachment_ids) if doc.x_attachment_ids else 0
+        
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Success',
+                'message': f'Test completed: {total_copied} attachments processed from {len(required_docs) + len(deliverable_docs)} documents.',
+                'type': 'success',
             }
         }
 

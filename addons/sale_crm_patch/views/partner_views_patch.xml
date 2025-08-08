@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Completely override the problematic sale_crm view -->
+    <record id="res_partner_address_type_patch" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.base.patch</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <!-- Only keep the working xpath expressions and remove the problematic ones -->
+            <xpath expr="//group/group/span/field[@name='type']" position="attributes">
+                <attribute name="groups">account.group_delivery_invoice_address</attribute>
+            </xpath>
+            <xpath expr="//group/group/span/field[@name='type']" position="after">
+                <field name="type" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

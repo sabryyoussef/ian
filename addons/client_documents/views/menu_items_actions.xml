@@ -42,12 +42,12 @@
     </menuitem>
 
     <!--    Document Users-->
-    <record id="contacts_documents_action_user" model="ir.actions.act_window">
+    <!-- <record id="contacts_documents_action_user" model="ir.actions.act_window">
         <field name="name">Documents</field>
         <field name="res_model">res.partner.document</field>
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="client_documents_tree_view_user"/>
-    </record>
+    </record> -->
     <record id="contacts_documents_category_action_user" model="ir.actions.act_window">
         <field name="name">Documents Categories</field>
         <field name="res_model">res.partner.document.category</field>
@@ -65,13 +65,13 @@
             name="Documents Users"
             parent="documents.menu_root"
             sequence="13"/>
-    <menuitem
+    <!-- <menuitem
             id="contacts_menu_documents"
             name="Documents"
             parent="client_documents.contacts_main_menu_documents"
             action="contacts_documents_action_user"
             sequence="2"
-    />
+    /> -->
     <menuitem
             id="contacts_menu_documents_category"
             name="Documents Categories"

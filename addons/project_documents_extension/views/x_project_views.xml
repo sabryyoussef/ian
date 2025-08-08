@@ -94,6 +94,7 @@
                 <button name="action_test_attachment_conversion" type="object" string="🧪 x_Test Attachments" class="btn-warning" style="margin-left: 4px;"/>
                 <button name="action_assign_project_folders" type="object" string="📁 Assign Folders" class="btn-info" style="margin-left: 4px;"/>
                 <button name="action_set_project_folder" type="object" string="🔧 Set Project Folder" class="btn-secondary" style="margin-left: 4px;"/>
+                <button name="action_test_copy_attachments" type="object" string="📎 Test Copy Attachments" class="btn-warning" style="margin-left: 4px;"/>
             </xpath>
             <xpath expr="//notebook" position="inside">
                 <page string="x_Required Documents">
@@ -129,6 +130,8 @@
                             <field name="x_is_expired"/>
                             <field name="project_folder_id"/>
                             <field name="attachment_id"/>
+                            <field name="x_attachment_ids" widget="many2many_tags"/>
+                            <button name="action_copy_attachments_to_project_folder" type="object" string="📎 Copy Attachments" class="btn-info" icon="fa-copy"/>
                         </list>
                         <form>
                             <group>
@@ -137,7 +140,11 @@
                                 <field name="x_is_required"/>
                                 <field name="project_folder_id"/>
                                 <field name="attachment_id"/>
+                                <field name="x_attachment_ids" widget="many2many_tags"/>
                             </group>
+                            <footer>
+                                <button name="action_copy_attachments_to_project_folder" type="object" string="📎 Copy Attachments to Project Folder" class="btn-primary"/>
+                            </footer>
                         </form>
                     </field>
                 </page>
@@ -174,6 +181,8 @@
                             <field name="x_is_expired"/>
                             <field name="project_folder_id"/>
                             <field name="attachment_id"/>
+                            <field name="x_attachment_ids" widget="many2many_tags"/>
+                            <button name="action_copy_attachments_to_project_folder" type="object" string="📎 Copy Attachments" class="btn-info" icon="fa-copy"/>
                         </list>
                         <form>
                             <group>
@@ -182,7 +191,11 @@
                                 <field name="x_is_required"/>
                                 <field name="project_folder_id"/>
                                 <field name="attachment_id"/>
+                                <field name="x_attachment_ids" widget="many2many_tags"/>
                             </group>
+                            <footer>
+                                <button name="action_copy_attachments_to_project_folder" type="object" string="📎 Copy Attachments to Project Folder" class="btn-primary"/>
+                            </footer>
                         </form>
                     </field>
                 </page>
